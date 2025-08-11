@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dlegateus - UK Offshore Accounting Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #fefefe;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 0;
+      transition: all 0.3s ease;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo-img {
+      height: 40px;
+      width: auto;
+      vertical-align: middle;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .nav-links a:hover { color: #1e3a8a; }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #1e3a8a;
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .hero {
+      height: 100vh;
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.8), rgba(59, 130, 246, 0.6)),
+        url('/modern-office-collaboration-dashboard.png') center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      position: relative;
+    }
+    .hero-content { animation: fadeInUp 1s ease-out; }
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .hero .subtitle {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+    .hero .tagline {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      font-weight: 300;
+    }
+    .about {
+      padding: 6rem 0;
+      background: #fefefe;
+    }
+    .about h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .about-content {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+      text-align: justify;
+    }
+    .about-content p { margin-bottom: 1.5rem; }
+    .portfolio {
+      padding: 6rem 0;
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      position: relative;
+    }
+    .portfolio::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('/placeholder-frext.png') center/cover;
+      opacity: 0.05;
+      z-index: 1;
+    }
+    .portfolio .container { position: relative; z-index: 2; }
+    .portfolio h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .service-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(30, 58, 138, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    .service-card:hover::before { left: 100%; }
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    .service-icon {
+      font-size: 3rem;
+      color: #1e3a8a;
+      margin-bottom: 1rem;
+    }
+    .service-card h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #1e3a8a;
+      margin-bottom: 1rem;
+    }
+    .service-card p {
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .service-btn {
+      display: inline-block;
+      background: #1e3a8a;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .service-btn:hover {
+      background: #1e40af;
+      transform: scale(1.05);
+    }
+    .contact {
+      padding: 6rem 0;
+      background: white;
+    }
+    .contact h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .contact-content {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .contact-icons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .contact-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #1e3a8a;
+      transition: all 0.3s ease;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .contact-icon:hover {
+      background: #f1f5f9;
+      transform: translateY(-5px);
+    }
+    .contact-icon i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .contact-icon span {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    footer {
+      background: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero h1 { font-size: 2.5rem; }
+      .hero .subtitle { font-size: 1.2rem; }
+      .services-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .contact-icons { flex-direction: column; gap: 1rem; }
+      .about h2, .portfolio h2, .contact h2 { font-size: 2rem; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav class="container">
+      <a href="#" class="logo">
+        <img src="public/dlegateus-logo.png" alt="Dlegateus Logo" class="logo-img" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#portfolio">Our Work</a></li>
+        <li><a href="#contact">Get in Touch</a></li>
+      </ul>
+    </nav>
+  </header>
+
+ <!-- Hero Section -->
+<section
+  class="hero"
+  style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.8), rgba(59, 130, 246, 0.6)), url('public/modern-office-collaboration-dashboard.png') center/cover;">
+  <div class="hero-content">
+    <h1>Dlegateus</h1>
+    <p class="subtitle">Trusted Offshore Partner</p>
+    <p class="tagline">Portfolio of Our Offshore UK Accounting Work</p>
+  </div>
+</section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <div class="container">
+      <h2 class="fade-in">Professional UK Accounting Services</h2>
+      <div class="about-content fade-in">
+        <p>We are a UK-focused offshore accounting service provider, delivering cost-effective and reliable support to accountants, bookkeepers, and small businesses. Founded by professionals with expertise in accounting, payroll, VAT compliance, and annual accounts preparation.</p>
+        <p>Our goal is to help UK firms save time and resources while ensuring full compliance with HMRC requirements. We also provide data analytics to give deeper insights into financial performance.</p>
+        <p>By combining accounting expertise with efficiency, accuracy, and confidentiality, we act as an extension of our clients' teams — offering the benefits of in-house staff without the high costs.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="portfolio">
+    <div class="container">
+      <h2 class="fade-in">Our Sample Services</h2>
+      <div class="services-grid">
+        <div class="service-card fade-in">
+          <div class="service-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <h3>Bookkeeping Services</h3>
+          <p>Comprehensive bookkeeping including transaction recording, bank reconciliation, AP/AR, and monthly statements.</p>
+          <a href="https://drive.google.com/file/d/1example-bookkeeping/view" class="service-btn" target="_blank">View Details</a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Payroll Processing</h3>
+          <p>PAYE, NI, pensions, RTI submissions, and year-end payroll reports with HMRC compliance.</p>
+          <a href="https://drive.google.com/file/d/1example-payroll/view" class="service-btn" target="_blank">View Details</a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-icon">
+            <i class="fas fa-file-invoice"></i>
+          </div>
+          <h3>VAT Returns & Compliance</h3>
+          <p>VAT preparation, submission, reconciliation, and advisory services.</p>
+          <a href="https://drive.google.com/file/d/1example-vat/view" class="service-btn" target="_blank">View Details</a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <h3>Annual Accounts Preparation</h3>
+          <p>Statutory accounts, Companies House filings, management accounts, and analysis.</p>
+          <a href="https://drive.google.com/file/d/1example-annual-accounts/view" class="service-btn" target="_blank">View Details</a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-icon">
+            <i class="fas fa-building"></i>
+          </div>
+          <h3>Corporate Tax Services</h3>
+          <p>Corporation tax calculations, CT600 filing, planning, and HMRC queries.</p>
+          <a href="https://drive.google.com/file/d/1example-corporate-tax/view" class="service-btn" target="_blank">View Details</a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-icon">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <h3>Self Assessment & Personal Tax</h3>
+          <p>Self-assessment, capital gains tax, and personal tax planning.</p>
+          <a href="https://drive.google.com/file/d/1example-self-assessment/view" class="service-btn" target="_blank">View Details</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2 class="fade-in">Get in Touch</h2>
+      <div class="contact-content fade-in">
+        <div class="contact-icons">
+          <a href="mailto:info@dlegateus.com" class="contact-icon">
+            <i class="fas fa-envelope"></i>
+            <span>Email Us</span>
+          </a>
+          <a href="#" class="contact-icon">
+            <i class="fab fa-linkedin"></i>
+            <span>LinkedIn</span>
+          </a>
+          <a href="#" class="contact-icon">
+            <i class="fab fa-facebook"></i>
+            <span>Facebook</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Dlegateus. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth fade-in animation on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+    // Header background on scroll
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 100) {
+        header.style.background = 'rgba(255, 255, 255, 0.98)';
+        header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+      } else {
+        header.style.background = 'rgba(255, 255, 255, 0.95)';
+        header.style.boxShadow = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
