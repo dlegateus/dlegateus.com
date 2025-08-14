@@ -9765,15 +9765,9 @@ fieldset:disabled .btn {
     --bs-link-underline-opacity: 1
 }
 
-/* .bg-primary {
-    --bs-bg-opacity: 1;
-    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important
-} */
-
 .bg-primary {
     --bs-bg-opacity: 1;
-    background-image: linear-gradient(135deg, #7d92f1 0%, #c48dfc 100%) !important;
-    background-color: transparent !important; /* fallback if needed */
+    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important
 }
 
 .bg-secondary {
