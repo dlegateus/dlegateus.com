@@ -1,7 +1,6 @@
 const contentDiv = document.getElementById('content');
 const mainNavLinks = document.querySelectorAll('.main-header .nav-link');
 
-// Load and inject the requested page content
 async function loadPage(path) {
     path = path.replace('.html', '').trim();
     if (!path || path === 'index') path = 'home';
@@ -17,18 +16,21 @@ async function loadPage(path) {
 
     history.replaceState({}, '', `#${path}`);
 
-    // ✨ Fade out the content before loading new page
-    contentDiv.classList.add('fade-out');
+    // 🔄 Create a fading clone of current content
+    const clone = contentDiv.cloneNode(true);
+    clone.id = 'content-fade-out';
+    clone.classList.remove('fade-in');
+    clone.classList.add('fade-out');
+    contentDiv.parentNode.insertBefore(clone, contentDiv.nextSibling);
 
     try {
-        // Wait for fade-out to finish before replacing content
-        await new Promise(resolve => setTimeout(resolve, 200)); // Match CSS fade-out duration
-
         const response = await fetch(`pages/${path}.html`);
         if (!response.ok) throw new Error('Page not found');
 
-        contentDiv.innerHTML = await response.text();
+        const html = await response.text();
+        contentDiv.innerHTML = html;
         contentDiv.setAttribute('data-loaded', 'true');
+        contentDiv.classList.add('fade-in');
 
         window.scrollTo(0, 0);
         updateDocumentTitle();
@@ -36,33 +38,32 @@ async function loadPage(path) {
 
         await waitForImages(contentDiv);
 
-        // ✨ Fade in the content
-        contentDiv.classList.remove('fade-out');
-        contentDiv.classList.add('fade-in');
-
+        // ⏳ Clean up fade-out clone after animation
         setTimeout(() => {
+            if (clone && clone.parentNode) {
+                clone.remove();
+            }
             contentDiv.classList.remove('fade-in');
-        }, 300); // Match CSS fade-in duration
+        }, 300); // Matches CSS fade duration
 
     } catch (error) {
         console.error(`Error loading page "${path}":`, error);
 
         const notFoundResponse = await fetch('pages/404.html');
         contentDiv.innerHTML = await notFoundResponse.text();
+        contentDiv.classList.add('fade-in');
         document.title = 'Page Not Found | Dlegateus';
 
         await waitForImages(contentDiv);
 
-        // Handle fade-in on 404 as well
-        contentDiv.classList.remove('fade-out');
-        contentDiv.classList.add('fade-in');
-
         setTimeout(() => {
+            if (clone && clone.parentNode) {
+                clone.remove();
+            }
             contentDiv.classList.remove('fade-in');
         }, 300);
     }
 }
-
 
 // Wait for all images inside container to load
 function waitForImages(container) {

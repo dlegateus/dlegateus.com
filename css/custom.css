@@ -4111,17 +4111,41 @@ header.main-header {
 
 
 
-
-#content.fade-out {
-    opacity: 0;
-    transition: opacity 0.2s ease-out;
-}
-
+/* Fading in new content */
 #content.fade-in {
-    opacity: 1;
-    transition: opacity 0.3s ease-in;
+	opacity: 0;
+	animation: fadeIn 0.3s ease forwards;
 }
 
+/* Fading out old content */
+#content-fade-out.fade-out {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 999;
+	animation: fadeOut 0.3s ease forwards;
+}
+
+/* Optional: Ensure layout doesn't shift */
+#content,
+#content-fade-out {
+	min-height: 500px;
+	/* or whatever your normal page height is */
+}
+
+/* Animations */
+@keyframes fadeIn {
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	to {
+		opacity: 0;
+	}
+}
 
 
 
