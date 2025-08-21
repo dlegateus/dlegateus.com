@@ -14,23 +14,18 @@ async function loadPage(path) {
         return;
     }
 
-    history.replaceState({}, '', `#${path}`);
-
-    // 🔄 Create a fading clone of current content
-    const clone = contentDiv.cloneNode(true);
-    clone.id = 'content-fade-out';
-    clone.classList.remove('fade-in');
-    clone.classList.add('fade-out');
-    contentDiv.parentNode.insertBefore(clone, contentDiv.nextSibling);
+    // Begin crossfade by fading out current content
+    contentDiv.classList.add('fade-out');
 
     try {
+        // Wait for fade-out to finish before replacing content
+        await new Promise(resolve => setTimeout(resolve, 200)); // Match CSS fade-out duration
+
         const response = await fetch(`pages/${path}.html`);
         if (!response.ok) throw new Error('Page not found');
 
-        const html = await response.text();
-        contentDiv.innerHTML = html;
+        contentDiv.innerHTML = await response.text();
         contentDiv.setAttribute('data-loaded', 'true');
-        contentDiv.classList.add('fade-in');
 
         window.scrollTo(0, 0);
         updateDocumentTitle();
@@ -38,30 +33,25 @@ async function loadPage(path) {
 
         await waitForImages(contentDiv);
 
-        // ⏳ Clean up fade-out clone after animation
-        setTimeout(() => {
-            if (clone && clone.parentNode) {
-                clone.remove();
-            }
-            contentDiv.classList.remove('fade-in');
-        }, 300); // Matches CSS fade duration
+        // Fade in the new content
+        contentDiv.classList.remove('fade-out');
+        contentDiv.classList.add('fade-in');
+
+        // Cleanup fade-in class after animation
+        setTimeout(() => contentDiv.classList.remove('fade-in'), 300); // Matches fade-in duration
 
     } catch (error) {
         console.error(`Error loading page "${path}":`, error);
 
         const notFoundResponse = await fetch('pages/404.html');
         contentDiv.innerHTML = await notFoundResponse.text();
-        contentDiv.classList.add('fade-in');
         document.title = 'Page Not Found | Dlegateus';
 
         await waitForImages(contentDiv);
 
-        setTimeout(() => {
-            if (clone && clone.parentNode) {
-                clone.remove();
-            }
-            contentDiv.classList.remove('fade-in');
-        }, 300);
+        contentDiv.classList.remove('fade-out');
+        contentDiv.classList.add('fade-in');
+        setTimeout(() => contentDiv.classList.remove('fade-in'), 300);
     }
 }
 

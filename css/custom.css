@@ -4110,43 +4110,29 @@ header.main-header {
 }
 
 
-
-/* Fading in new content */
-#content.fade-in {
+/* Fading out the old content */
+#content.fade-out {
 	opacity: 0;
-	animation: fadeIn 0.3s ease forwards;
+	transition: opacity 0.2s ease-out;
 }
 
-/* Fading out old content */
-#content-fade-out.fade-out {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 999;
-	animation: fadeOut 0.3s ease forwards;
+/* Fading in the new content */
+#content.fade-in {
+	opacity: 1;
+	transition: opacity 0.3s ease-in;
 }
 
-/* Optional: Ensure layout doesn't shift */
-#content,
-#content-fade-out {
+/* Optional: Avoid layout shifts (optional fix for large pages) */
+#content {
+	position: relative;
 	min-height: 500px;
-	/* or whatever your normal page height is */
+	/* Adjust based on your layout */
 }
 
-/* Animations */
-@keyframes fadeIn {
-	to {
-		opacity: 1;
-	}
+/* Prevent content from going out of position during fade-out */
+#content {
+	transition: opacity 0.2s ease-out;
 }
-
-@keyframes fadeOut {
-	to {
-		opacity: 0;
-	}
-}
-
 
 
 .scroll-to-top {
