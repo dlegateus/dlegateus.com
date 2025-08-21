@@ -6,7 +6,6 @@ async function loadPage(path) {
     path = path.replace('.html', '').trim();
     if (!path || path === 'index') path = 'home';
 
-    // Skip fetching if home is already preloaded
     const isFirstLoad = contentDiv.getAttribute('data-loaded') !== 'true';
     if (path === 'home' && isFirstLoad) {
         contentDiv.setAttribute('data-loaded', 'true');
@@ -16,13 +15,15 @@ async function loadPage(path) {
         return;
     }
 
-    // Update the hash in the address bar
     history.replaceState({}, '', `#${path}`);
 
-    // Optional: Show a loader for non-home pages
-    contentDiv.innerHTML = '<div class="loader">Loading...</div>';
+    // ✨ Fade out the content before loading new page
+    contentDiv.classList.add('fade-out');
 
     try {
+        // Wait for fade-out to finish before replacing content
+        await new Promise(resolve => setTimeout(resolve, 200)); // Match CSS fade-out duration
+
         const response = await fetch(`pages/${path}.html`);
         if (!response.ok) throw new Error('Page not found');
 
@@ -35,6 +36,14 @@ async function loadPage(path) {
 
         await waitForImages(contentDiv);
 
+        // ✨ Fade in the content
+        contentDiv.classList.remove('fade-out');
+        contentDiv.classList.add('fade-in');
+
+        setTimeout(() => {
+            contentDiv.classList.remove('fade-in');
+        }, 300); // Match CSS fade-in duration
+
     } catch (error) {
         console.error(`Error loading page "${path}":`, error);
 
@@ -43,8 +52,17 @@ async function loadPage(path) {
         document.title = 'Page Not Found | Dlegateus';
 
         await waitForImages(contentDiv);
+
+        // Handle fade-in on 404 as well
+        contentDiv.classList.remove('fade-out');
+        contentDiv.classList.add('fade-in');
+
+        setTimeout(() => {
+            contentDiv.classList.remove('fade-in');
+        }, 300);
     }
 }
+
 
 // Wait for all images inside container to load
 function waitForImages(container) {

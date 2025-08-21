@@ -4112,17 +4112,15 @@ header.main-header {
 
 
 
-
-
-.loader {
-	text-align: center;
-	padding: 2rem;
-	font-size: 1.2rem;
-	color: #555;
+#content.fade-out {
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
 }
 
-
-
+#content.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease-in;
+}
 
 
 
