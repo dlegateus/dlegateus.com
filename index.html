@@ -101,15 +101,9 @@
                     </a>
                     <!-- Logo -->
 
-                    <h3 class="fw-bold mb-0 px-3 text-theme responsive-heading">
-                        Trusted Offshore Partner
-                    </h3>
-
-                    <style>
-                        .responsive-heading {
-                            font-size: clamp(1.2rem, 2.5vw, 2rem);
-                        }
-                    </style>
+                    <div class="scrolling-wrapper">
+                        <h3 class="scrolling-heading">Trusted Offshore Partner</h3>
+                    </div>
 
                     <!-- Main Menu Start -->
                     <div class="collapse navbar-collapse main-menu">
@@ -118,7 +112,8 @@
                             <li class="nav-item"><a class="nav-link" href="#about">About&nbsp;Us</a></li>
                             <li class="nav-item"><a class="nav-link" href="#contact">Contact&nbsp;Us</a></li>
                             <li class="nav-item">
-                                <a class="btn btn-md custom-btn text-white" href="#freeTrail">Free Trial</a>
+                                <a class="btn custom-btn btn-lg shadow px-5 py-2 fs-5 fw-bold text-uppercase text-white"
+                                    href="#freeTrail">Free Trial</a>
                             </li>
                         </ul>
                     </div>
@@ -163,7 +158,8 @@
     </main>
 
     <!--Tax Banner Starts-->
-    <div class="tax-banner position-relative overflow-hidden text-white">
+    <div class="tax-banner position-relative overflow-hidden text-white"
+        style="margin-bottom: 100px; margin-top: 50px;">
         <div class="container">
             <div class="text-container position-relative py-3 text-center" style="z-index: 2;">
                 <style>
@@ -262,9 +258,12 @@
                                             <h2>Socials</h2>
                                             <ul>
                                                 <li><a href="javascript:void()">instagram</a></li>
-                                                <li><a href="https://www.facebook.com/">facebook</a></li>
+                                                <li><a
+                                                        href="https://www.facebook.com/profile.php?id=61579045785164">facebook</a>
+                                                </li>
                                                 <li><a href="javascript:void()">youtube</a></li>
-                                                <li><a href="javascript:void()">linkedin</a></li>
+                                                <li><a href="https://linkedin.com/company/dlegateus-com">linkedin</a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <!-- Footer Links End -->
@@ -274,11 +273,12 @@
                                         <div class="footer-contact">
                                             <h2>say hello</h2>
                                             <ul>
-                                                <li><a href="javascript:void()">infomail@accountant.com</a></li>
+                                                <li><a href="javascript:void()">info@dlegateus.com</a></li>
                                             </ul>
                                         </div>
                                         <div class="footer-contact pt-5">
-                                            <a href="https://portfolio.com" class="portfolio-link">Visit Our
+                                            <a href="https://omarnot2far.github.io/Dlegateus-Portfolio"
+                                                class="portfolio-link">Visit Our
                                                 Portfolio</a>
                                         </div>
                                     </div>
@@ -318,6 +318,74 @@
 
     <!-- Scroll to Top Button -->
     <a href="javascript:void()" class="scroll-to-top" id="scrollToTopBtn">Top</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            emailjs.init("OlWbWLbUgqZMJmNW8"); // Initialize once at the start
+
+            const observer = new MutationObserver(() => {
+                // Handle Get In Touch form
+                const getInTouchForm = document.getElementById("getInTouch");
+                if (getInTouchForm && !getInTouchForm.classList.contains("emailjs-bound-getintouch")) {
+                    getInTouchForm.classList.add("emailjs-bound-getintouch");
+
+                    getInTouchForm.addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        document.getElementById("time").value = new Date().toLocaleString();
+
+                        if (!getInTouchForm.checkValidity()) {
+                            getInTouchForm.classList.add('was-validated');
+                            return;
+                        }
+
+                        emailjs.sendForm("service_5j57utj", "template_ojlvyrr", getInTouchForm)
+                            .then(() => {
+                                alert("✅ Message sent successfully!");
+                                getInTouchForm.reset();
+                                getInTouchForm.classList.remove('was-validated');
+                            }, (error) => {
+                                alert("❌ Failed to send message.");
+                                console.error("EmailJS error:", error);
+                            });
+                    });
+                }
+
+                // Handle Free Trial form
+                const freeTrialForm = document.getElementById("freetrialForm");
+                if (freeTrialForm && !freeTrialForm.classList.contains("emailjs-bound-freetrial")) {
+                    freeTrialForm.classList.add("emailjs-bound-freetrial");
+
+                    freeTrialForm.addEventListener("submit", function (e) {
+                        e.preventDefault();
+
+                        const timeInput = document.getElementById("timeFreetrial");
+                        timeInput.value = new Date().toLocaleString();
+
+                        if (!freeTrialForm.checkValidity()) {
+                            freeTrialForm.classList.add('was-validated');
+                            return;
+                        }
+
+                        emailjs.sendForm("service_5j57utj", "template_ozben7g", freeTrialForm)
+                            .then(() => {
+                                alert("✅ Free Trial request sent successfully!");
+                                freeTrialForm.reset();
+                                freeTrialForm.classList.remove('was-validated');
+                            }, (error) => {
+                                alert("❌ Failed to send Free Trial request.");
+                                console.error("EmailJS Error:", error);
+                            });
+                    });
+                }
+            });
+
+            observer.observe(document.getElementById("content"), {
+                childList: true,
+                subtree: true
+            });
+        });
+    </script>
 
     <!-- Router JS -->
     <script src="router/router.js"></script>

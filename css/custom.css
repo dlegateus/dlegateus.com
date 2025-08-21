@@ -406,9 +406,10 @@ body {
 
 header.main-header {
 	background: linear-gradient(135deg, #c8f2ff, #cbdfe6);
-	position: relative;
 	height: 80px;
-	z-index: 100;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
 }
 
 .navbar {
@@ -4110,19 +4111,6 @@ header.main-header {
 }
 
 
-
-
-/* #content.fade-out {
-    opacity: 0;
-    transition: opacity 0.2s ease-out;
-}
-
-#content.fade-in {
-    opacity: 1;
-    transition: opacity 0.3s ease-in;
-} */
-
-
 /* Fade out the current content */
 #content.fade-out {
 	opacity: 0;
@@ -4865,4 +4853,38 @@ footer a:hover {
 /* Optional: make sure collapsed state is hidden smoothly */
 .accordion-body {
 	opacity: 0;
+}
+
+
+
+.scrolling-wrapper {
+	overflow: hidden;
+	white-space: nowrap;
+	position: relative;
+	height: 50px;
+	/* Adjust as needed */
+	display: flex;
+	align-items: center;
+}
+
+/* Text animation */
+.scrolling-heading {
+	display: inline-block;
+	font-size: clamp(1.2rem, 2.5vw, 2rem);
+	font-weight: bold;
+	color: #1a237e;
+	/* Bootstrap primary color */
+	white-space: nowrap;
+	padding-left: 100%;
+	animation: scroll-left 10s linear infinite;
+}
+
+@keyframes scroll-left {
+	0% {
+		transform: translateX(0%);
+	}
+
+	100% {
+		transform: translateX(-100%);
+	}
 }
