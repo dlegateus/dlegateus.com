@@ -4109,6 +4109,24 @@ header.main-header {
 	}
 }
 
+
+
+
+
+
+.loader {
+	text-align: center;
+	padding: 2rem;
+	font-size: 1.2rem;
+	color: #555;
+}
+
+
+
+
+
+
+
 .scroll-to-top {
 	position: fixed;
 	z-index: 1111;
@@ -4794,27 +4812,28 @@ footer a:hover {
 
 /* Target the accordion body when it is shown */
 .accordion-collapse.collapse {
-    transition: height 0.35s ease;
-    overflow: hidden;
+	transition: height 0.35s ease;
+	overflow: hidden;
 }
 
 .accordion-collapse.collapse.show .accordion-body {
-    animation: fadeSlideIn 0.5s ease forwards;
+	animation: fadeSlideIn 0.5s ease forwards;
 }
 
 /* Fade and slide-up effect */
 @keyframes fadeSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+	0% {
+		opacity: 0;
+		transform: translateY(15px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 /* Optional: make sure collapsed state is hidden smoothly */
 .accordion-body {
-    opacity: 0;
+	opacity: 0;
 }
