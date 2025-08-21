@@ -3,35 +3,41 @@ const mainNavLinks = document.querySelectorAll('.main-header .nav-link');
 
 // Load and inject the requested page content
 async function loadPage(path) {
-    // Normalize path
     path = path.replace('.html', '').trim();
     if (!path || path === 'index') path = 'home';
 
-    // Update the address bar hash BEFORE loading content
+    // Skip fetching if home is already preloaded
+    const isFirstLoad = contentDiv.getAttribute('data-loaded') !== 'true';
+    if (path === 'home' && isFirstLoad) {
+        contentDiv.setAttribute('data-loaded', 'true');
+        updateDocumentTitle();
+        updateActiveNavLink(path);
+        history.replaceState({}, '', `#home`);
+        return;
+    }
+
+    // Update the hash in the address bar
     history.replaceState({}, '', `#${path}`);
 
-    // Optional: Show a basic loading state
+    // Optional: Show a loader for non-home pages
     contentDiv.innerHTML = '<div class="loader">Loading...</div>';
 
     try {
         const response = await fetch(`pages/${path}.html`);
         if (!response.ok) throw new Error('Page not found');
 
-        // Inject content
         contentDiv.innerHTML = await response.text();
+        contentDiv.setAttribute('data-loaded', 'true');
 
-        // Scroll to top and update title/nav
         window.scrollTo(0, 0);
         updateDocumentTitle();
         updateActiveNavLink(path);
 
-        // Wait for all images to load (optional polish)
         await waitForImages(contentDiv);
 
     } catch (error) {
         console.error(`Error loading page "${path}":`, error);
 
-        // Load 404 fallback page
         const notFoundResponse = await fetch('pages/404.html');
         contentDiv.innerHTML = await notFoundResponse.text();
         document.title = 'Page Not Found | Dlegateus';
@@ -40,7 +46,7 @@ async function loadPage(path) {
     }
 }
 
-// Wait for all images inside a container to load
+// Wait for all images inside container to load
 function waitForImages(container) {
     const images = container.querySelectorAll('img');
     const promises = Array.from(images).map(img => {
@@ -52,7 +58,7 @@ function waitForImages(container) {
     return Promise.all(promises);
 }
 
-// Update <title> dynamically from heading/title element
+// Dynamically update <title> based on page heading or title element
 function updateDocumentTitle() {
     const titleElement =
         contentDiv.querySelector('h1') ||
@@ -74,20 +80,20 @@ function updateActiveNavLink(activePath) {
     });
 }
 
-// Handle navigation on page load or when hash changes
+// Handle navigation on page load or hash change
 function handleNavigation() {
     let hash = window.location.hash.substring(1).trim();
 
-    // Default to home if no hash
+    // Default to #home if no hash
     if (!hash) {
         hash = 'home';
-        history.replaceState({}, '', `#${hash}`);  // Don't add a new history entry
+        history.replaceState({}, '', `#${hash}`);
     }
 
     loadPage(hash);
 }
 
-// Intercept clicks and route them through the SPA
+// Intercept navigation link clicks
 function handleLinkClick(e) {
     const navLink = e.target.closest('[data-router-link], .nav-link, .navbar-brand');
     if (navLink && !e.ctrlKey && !e.metaKey) {
@@ -103,5 +109,5 @@ window.addEventListener('DOMContentLoaded', handleNavigation);
 window.addEventListener('hashchange', handleNavigation);
 document.addEventListener('click', handleLinkClick);
 
-// Global navigation function for programmatic routing
+// Global navigation function
 window.navigateTo = (path) => loadPage(path);
