@@ -4110,29 +4110,50 @@ header.main-header {
 }
 
 
-/* Fading out the old content */
-#content.fade-out {
-	opacity: 0;
-	transition: opacity 0.2s ease-out;
+
+
+/* #content.fade-out {
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
 }
 
-/* Fading in the new content */
+#content.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease-in;
+} */
+
+
+/* Fade out the current content */
+#content.fade-out {
+	opacity: 0;
+	transition: opacity 0.25s ease-out;
+	/* Slightly extended to 250ms */
+	visibility: hidden;
+	/* Ensures it hides during fade-out */
+}
+
+/* Fade in the new content */
 #content.fade-in {
 	opacity: 1;
 	transition: opacity 0.3s ease-in;
+	/* 300ms fade-in for smooth transition */
+	visibility: visible;
+	/* Ensure content remains visible during fade-in */
 }
 
-/* Optional: Avoid layout shifts (optional fix for large pages) */
+/* Optional: Prevent layout shift during transition */
 #content {
 	position: relative;
 	min-height: 500px;
-	/* Adjust based on your layout */
+	/* Adjust this based on your content size */
 }
 
-/* Prevent content from going out of position during fade-out */
-#content {
-	transition: opacity 0.2s ease-out;
+/* Optional: Fade-out visibility reset after animation completes */
+#content.fade-out {
+	transition: opacity 0.25s ease-out, visibility 0s 0.25s;
+	/* Hide visibility after fade-out */
 }
+
 
 
 .scroll-to-top {
