@@ -1,18 +1,6 @@
 const contentDiv = document.getElementById('content');
 const mainNavLinks = document.querySelectorAll('.main-header .nav-link');
 
-// Track page view in GTM
-function trackPageView(pageName) {
-    if (typeof dataLayer !== 'undefined') {
-        dataLayer.push({
-            'event': 'pageView',
-            'pageName': pageName,
-            'pagePath': window.location.hash || '#home'
-        });
-    }
-    console.log('Page viewed:', pageName);
-}
-
 // Load and inject the requested page content
 async function loadPage(path) {
     path = path.replace('.html', '').trim();
@@ -24,9 +12,6 @@ async function loadPage(path) {
         updateDocumentTitle();
         updateActiveNavLink(path);
         history.replaceState({}, '', `#home`);
-
-        // Track initial page view
-        trackPageView('home');
         return;
     }
 
@@ -37,7 +22,7 @@ async function loadPage(path) {
 
     try {
         // Wait for fade-out to finish before replacing content
-        await new Promise(resolve => setTimeout(resolve, 250));
+        await new Promise(resolve => setTimeout(resolve, 250)); // Match CSS fade-out duration (change to 250ms for smoother transition)
 
         const response = await fetch(`pages/${path}.html`);
         if (!response.ok) throw new Error('Page not found');
@@ -55,12 +40,9 @@ async function loadPage(path) {
         contentDiv.classList.remove('fade-out');
         contentDiv.classList.add('fade-in');
 
-        // Track page view after content is loaded
-        trackPageView(path);
-
         setTimeout(() => {
             contentDiv.classList.remove('fade-in');
-        }, 300);
+        }, 300); // Match CSS fade-in duration (fade-in completes in 300ms)
 
     } catch (error) {
         console.error(`Error loading page "${path}":`, error);
@@ -71,9 +53,6 @@ async function loadPage(path) {
 
         await waitForImages(contentDiv);
 
-        // Track 404 page view
-        trackPageView('404');
-
         // Handle fade-in on 404 as well
         contentDiv.classList.remove('fade-out');
         contentDiv.classList.add('fade-in');
@@ -83,6 +62,7 @@ async function loadPage(path) {
         }, 300);
     }
 }
+
 
 // Wait for all images inside container to load
 function waitForImages(container) {
