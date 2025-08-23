@@ -1,16 +1,21 @@
 const contentDiv = document.getElementById('content');
 const mainNavLinks = document.querySelectorAll('.main-header .nav-link');
 
-// Track page view in GTM
+// Enhanced trackPageView function
 function trackPageView(pageName) {
-    if (typeof dataLayer !== 'undefined') {
-        dataLayer.push({
-            'event': 'pageView',
-            'pageName': pageName,
-            'pagePath': window.location.hash || '#home'
-        });
-    }
-    console.log('Page viewed:', pageName);
+    // Wait a brief moment to ensure content is fully rendered
+    setTimeout(() => {
+        if (typeof dataLayer !== 'undefined') {
+            dataLayer.push({
+                'event': 'pageView',
+                'pageName': pageName,
+                'pagePath': window.location.hash || '#home',
+                'pageTitle': document.title,
+                'pageLoadTime': performance.now().toFixed(0) + 'ms'
+            });
+        }
+        console.log('Page viewed:', pageName);
+    }, 100);
 }
 
 // Load and inject the requested page content

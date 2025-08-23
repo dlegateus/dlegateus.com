@@ -24,71 +24,149 @@ document.getElementById('year').textContent = currentYear;
 
 
 //***************************Google Tag Manager Tracking Start***************************
-// Track user interactions
-document.addEventListener('DOMContentLoaded', function () {
-    // Track CTA button clicks
-    document.addEventListener('click', function (e) {
-        // Track navigation clicks
-        if (e.target.matches('.nav-link, [data-router-link]')) {
-            const linkText = e.target.textContent.trim();
-            const linkHref = e.target.getAttribute('href');
+// Enhanced tracking for user interactions
+document.addEventListener('DOMContentLoaded', function() {
+    // Track pageView on initial load
+    if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+            'event': 'pageView',
+            'pageName': window.location.hash.replace('#', '') || 'home',
+            'pagePath': window.location.hash || '#home',
+            'pageTitle': document.title
+        });
+    }
 
+    // Consolidated click tracking function
+    function trackClickEvent(e) {
+        const link = e.target.closest('a');
+        if (!link) return;
+        
+        const href = link.href;
+        const linkText = link.textContent.trim();
+        const linkClasses = link.className;
+        
+        // Track navClick events
+        if (link.matches('.nav-link, [data-router-link]')) {            
             if (typeof dataLayer !== 'undefined') {
                 dataLayer.push({
                     'event': 'navClick',
                     'linkText': linkText,
-                    'linkHref': linkHref
+                    'linkHref': href
                 });
             }
+            return;
         }
-
+        
         // Track CTA button clicks
-        if (e.target.matches('.cta-button, .custom-btn')) {
-            const buttonText = e.target.textContent.trim();
-
+        if (link.matches('.cta-button, .custom-btn')) {
             if (typeof dataLayer !== 'undefined') {
                 dataLayer.push({
                     'event': 'ctaClick',
-                    'buttonText': buttonText,
-                    'buttonLocation': e.target.closest('section') ? e.target.closest('section').id || 'unknown' : 'unknown'
+                    'buttonText': linkText,
+                    'buttonLocation': link.closest('section') ? link.closest('section').id || 'unknown' : 'unknown'
                 });
             }
+            return;
         }
-
-        // Track social media clicks
-        if (e.target.closest('a[href*="facebook"], a[href*="linkedin"], a[href*="instagram"], a[href*="youtube"]')) {
-            const socialLink = e.target.closest('a').href;
-
+        
+        // Track social media clicks (ONLY using data attributes)
+        if (link.hasAttribute('data-social-platform')) {
+            const platform = link.getAttribute('data-social-platform');
+            const action = link.getAttribute('data-social-action') || 'click';
+            const network = link.getAttribute('data-social-network') || platform;
+            
             if (typeof dataLayer !== 'undefined') {
                 dataLayer.push({
                     'event': 'socialClick',
-                    'socialPlatform': getSocialPlatform(socialLink)
+                    'socialPlatform': platform,
+                    'socialAction': action,
+                    'socialNetwork': network,
+                    'socialTarget': href
                 });
             }
+            
+            // For JavaScript void links, prevent default after tracking
+            if (href === 'javascript:void(0)') {
+                e.preventDefault();
+            }
+            return;
         }
-    });
-
-    // Track form submissions
-    document.addEventListener('submit', function (e) {
+        
+        // Track all outbound links (outboundLinkClick events)
+        if (href && !href.includes(window.location.hostname) && !href.startsWith('javascript:') && 
+            !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push({
+                    'event': 'outboundLinkClick',
+                    'linkText': linkText,
+                    'linkHref': href,
+                    'linkClasses': linkClasses
+                });
+            }
+            return;
+        }
+        
+        // Track email links (emailClick events)
+        if (href && href.startsWith('mailto:')) {
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push({
+                    'event': 'emailClick',
+                    'emailAddress': href.replace('mailto:', '')
+                });
+            }
+            return;
+        }
+        
+        // Track telephone links (phoneClick events)
+        if (href && href.startsWith('tel:')) {
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push({
+                    'event': 'phoneClick',
+                    'phoneNumber': href.replace('tel:', '')
+                });
+            }
+            return;
+        }
+    }
+    
+    // Use a single click event listener
+    document.addEventListener('click', trackClickEvent);
+    
+    // Track form submissions (formSubmit events)
+    document.addEventListener('submit', function(e) {
         if (e.target.matches('form')) {
             const formId = e.target.id || 'unknown-form';
-
+            
             if (typeof dataLayer !== 'undefined') {
                 dataLayer.push({
                     'event': 'formSubmit',
                     'formId': formId,
-                    'formName': formId === 'getInTouch' ? 'Contact Form' :
-                        formId === 'freetrialForm' ? 'Free Trial Form' : 'Unknown Form'
+                    'formName': formId === 'getInTouch' ? 'Contact Form' : 
+                               formId === 'freetrialForm' ? 'Free Trial Form' : 'Unknown Form'
                 });
             }
         }
     });
-
-    // Track scroll depth
+    
+    // Track form interactions (focus events)
+    document.addEventListener('focus', function(e) {
+        if (e.target.matches('input, textarea, select')) {
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push({
+                    'event': 'formFieldFocus',
+                    'fieldType': e.target.type,
+                    'fieldName': e.target.name || 'unnamed',
+                    'formId': e.target.form ? e.target.form.id || 'unknown-form' : 'no-form'
+                });
+            }
+        }
+    }, true);
+    
+    // Track scroll depth (scrollDepth events)
     let scrollDepthTracked = [25, 50, 75, 90];
-    window.addEventListener('scroll', function () {
+    window.addEventListener('scroll', function() {
         const scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-
+        
         if (scrollDepthTracked.includes(scrollPercent)) {
             if (typeof dataLayer !== 'undefined') {
                 dataLayer.push({
@@ -99,15 +177,72 @@ document.addEventListener('DOMContentLoaded', function () {
             // Remove this percentage from tracking array
             scrollDepthTracked = scrollDepthTracked.filter(p => p !== scrollPercent);
         }
+        
+        // Enhanced scroll tracking (scrollUpdate events)
+        const now = Date.now();
+        if (now - lastScrollReport < scrollReportDelay) return;
+        lastScrollReport = now;
+        
+        const viewportHeight = window.innerHeight;
+        const totalHeight = document.documentElement.scrollHeight;
+        
+        if (typeof dataLayer !== 'undefined') {
+            dataLayer.push({
+                'event': 'scrollUpdate',
+                'scrollPercentage': scrollPercent,
+                'viewportHeight': viewportHeight,
+                'totalHeight': totalHeight,
+                'verticalPixels': window.scrollY
+            });
+        }
     });
 });
 
-// Helper function to extract social platform from URL
-function getSocialPlatform(url) {
-    if (url.includes('facebook')) return 'Facebook';
-    if (url.includes('linkedin')) return 'LinkedIn';
-    if (url.includes('instagram')) return 'Instagram';
-    if (url.includes('youtube')) return 'YouTube';
-    return 'Other';
+// Track JavaScript errors
+window.addEventListener('error', function(e) {
+    if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+            'event': 'javascriptError',
+            'errorMessage': e.error ? e.error.message : e.message,
+            'errorFile': e.filename,
+            'errorLine': e.lineno,
+            'errorColumn': e.colno
+        });
+    }
+});
+
+// Track promise rejections
+window.addEventListener('unhandledrejection', function(e) {
+    if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+            'event': 'promiseRejection',
+            'reason': e.reason ? e.reason.message : 'Unknown reason'
+        });
+    }
+});
+
+// Enhanced scroll tracking variables
+let lastScrollReport = 0;
+const scrollReportDelay = 500; // ms
+
+// Time tracking
+let pageStartTime = Date.now();
+
+function trackTimeOnPage() {
+    const timeSpent = Date.now() - pageStartTime;
+    if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+            'event': 'timeOnPage',
+            'timeSpent': Math.round(timeSpent / 1000) + 's',
+            'pageName': window.location.hash.replace('#', '') || 'home'
+        });
+    }
 }
+
+// Track every 30 seconds
+setInterval(trackTimeOnPage, 30000);
+
+// Track when user leaves the page
+window.addEventListener('beforeunload', trackTimeOnPage);
+
 //***************************Google Tag Manager Tracking End***************************
