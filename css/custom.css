@@ -4491,14 +4491,13 @@ header.main-header {
 	background-color: white;
 	max-height: 60px;
 	width: auto;
-	height: auto;
 }
 
 @media (max-width: 576px) {
 	.logo-img {
 		padding-top: 5px;
 		max-width: 90px;
-		height: auto;
+		max-height: 50px;
 	}
 }
 
