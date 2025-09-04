@@ -4293,50 +4293,6 @@ header.main-header {
 }
 
 
-
-
-
-
-
-.hero {
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-	color: white;
-	height: 90vh;
-}
-
-.hero-title {
-	font-size: 3rem;
-	font-weight: 700;
-	animation: fadeInDown 1.2s ease forwards;
-}
-
-.hero-title .highlight {
-	display: inline-block;
-	animation: fadeInRight 1.2s ease 0.5s forwards;
-	opacity: 0;
-}
-
-.hero-subtitle {
-	font-size: 1.6rem;
-	margin: 1rem 0 2rem;
-	opacity: 0;
-	animation: fadeInUp 1.2s ease 1s forwards;
-}
-
-.hero-subtitle .slide-left {
-	display: inline-block;
-	opacity: 0;
-	animation: slideInLeft 1.2s ease 1.4s forwards;
-}
-
-.hero-subtitle .slide-right {
-	display: inline-block;
-	opacity: 0;
-	animation: slideInRight 1.2s ease 1.8s forwards;
-}
-
 .value-proposition {
 	background: rgba(255, 255, 255, 0.1);
 	backdrop-filter: blur(10px);
@@ -4502,6 +4458,39 @@ header.main-header {
 }
 
 /* Hero Section */
+
+.hero-title {
+	font-size: 3rem;
+	font-weight: 700;
+	animation: fadeInDown 1.2s ease forwards;
+}
+
+.hero-title .highlight {
+	display: inline-block;
+	animation: fadeInRight 1.2s ease 0.5s forwards;
+	opacity: 0;
+}
+
+.hero-subtitle {
+	font-size: 1.6rem;
+	margin: 1rem 0 2rem;
+	opacity: 0;
+	animation: fadeInUp 1.2s ease 1s forwards;
+}
+
+.hero-subtitle .slide-left {
+	display: inline-block;
+	opacity: 0;
+	animation: slideInLeft 1.2s ease 1.4s forwards;
+}
+
+.hero-subtitle .slide-right {
+	display: inline-block;
+	opacity: 0;
+	animation: slideInRight 1.2s ease 1.8s forwards;
+}
+
+
 .hero {
 	background: linear-gradient(135deg, #299AD6 0%, #65A9C4 60%, #A59F6D 85%);
 	color: white;
@@ -4852,6 +4841,7 @@ footer a:hover {
 		);
 	background-size: 300%;
 	-webkit-background-clip: text;
+	background-clip: text;
 	-webkit-text-fill-color: transparent;
 	animation: shimmer 3s infinite linear;
 	transition: transform 0.3s ease;
