@@ -79,10 +79,6 @@ header {
 	background-color: var(--accent-color);
 }
 
-/* .social_header {
-	background: var(--range-gradient);
-} */
-
 p {
 	line-height: 1.6em;
 	margin-bottom: 1.6em;
@@ -582,7 +578,7 @@ header.main-header {
 	z-index: 1111;
 	width: 100%;
 	padding: 0;
-	background: var(--accent-color);
+	background: linear-gradient(135deg, #004164 0%, #398aaa 60%, #A59F6D 85%);
 }
 
 .slicknav_menu ul {
@@ -609,11 +605,8 @@ header.main-header {
 
 .slicknav_nav a:hover,
 .slicknav_nav .slicknav_row:hover {
-	/* background-color: transparent;
-	color: var(--aqua-color); */
-
 	color: var(--primary-color);
-	background: var(--light-teal-color);
+	background: linear-gradient(135deg, #66c9ff 0%, #38addb 60%, #A59F6D 80%);
 	font-weight: bold;
 	text-transform: capitalize;
 	border-radius: 8px;
@@ -4142,8 +4135,6 @@ header.main-header {
 	/* Hide visibility after fade-out */
 }
 
-
-
 .scroll-to-top {
 	position: fixed;
 	z-index: 1111;
@@ -4153,7 +4144,7 @@ header.main-header {
 	color: white;
 	padding: 6px 9px;
 	border: none;
-	border-radius: 5px;
+	border-radius: 7px;
 	text-decoration: none;
 	display: none;
 	/* Hidden by default */
@@ -4467,7 +4458,6 @@ header.main-header {
 }
 
 
-
 .text-theme {
 	color: #0d47a1;
 	font-weight: bold;
@@ -4487,10 +4477,29 @@ header.main-header {
 	box-shadow: 0 0 30px rgba(0, 200, 255, 0.9);
 }
 
+.navbar .container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+	gap: 10px;
+}
+
 .logo-img {
 	display: block;
 	border-radius: 10px;
 	background-color: white;
+	max-height: 60px;
+	width: auto;
+	height: auto;
+}
+
+@media (max-width: 576px) {
+	.logo-img {
+		padding-top: 5px;
+		max-width: 90px;
+		height: auto;
+	}
 }
 
 /* Hero Section */
@@ -4519,6 +4528,43 @@ header.main-header {
 	z-index: 0;
 	pointer-events: none;
 }
+
+@media (max-width: 576px) {
+	.hero {
+		padding: 50px 10px;
+		text-align: center;
+	}
+
+	.hero-title {
+		font-size: 1.75rem;
+		line-height: 1.4;
+	}
+
+	.hero-subtitle {
+		font-size: 1.1rem;
+		margin-top: 25px;
+		line-height: 1.5;
+	}
+
+	.value-proposition {
+		max-width: 100%;
+		padding: 30px;
+		border-radius: 10px;
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(4px);
+	}
+
+	.value-proposition h2.pop {
+		line-height: 1.6;
+	}
+
+	.value-proposition h5 {
+		line-height: 1.5;
+		font-size: 1rem;
+		padding: 12px 0;
+	}
+}
+
 
 @keyframes float {
 	0% {
@@ -4854,8 +4900,6 @@ footer a:hover {
 .accordion-body {
 	opacity: 0;
 }
-
-
 
 .scrolling-wrapper {
 	overflow: hidden;
